@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//statusCliente	ipConcentrador	nomeConcentrador	conexaoCliente	latitudeCliente	longitudeCliente	conexaoInicial	conexaoFinal	tempoConectado	consumoDownload	consumoUpload	motivoDesconexao	popCliente	nomeCliente	enderecoCliente	bairroCliente	cidadeCliente	contratoStatus	planoContrato	statusInternet	downloadCliente	uploadCliente	valorPlano	timestamp		
+
+model Customers {
+  id      String    @id @default(uuid())
+  name    String    @unique
+  perfil  Int
+  Metrics Metrics[]
+
+  @@map("customers")
+}
+
+model Metrics {
+  id         String    @id @default(uuid())
+  date       DateTime
+  latency    Int?
+  packetLoss Int?
+  ping       Boolean?
+  traffic    Float?
+  customer   Customers @relation(fields: [customerId], references: [id])
+  customerId String
+
+  @@map("metrics")
+}
